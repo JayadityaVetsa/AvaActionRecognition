@@ -2,19 +2,19 @@
 
 > *"Can pretrained CNNs recognize atomic human actions from single frames? I benchmarked a from-scratch CNN vs. a fine-tuned EfficientNet-B2 on a curated AVA v2.2 subset and analyzed where frame-level models fail."*
 
-## 📌 Project Overview
+## Project Overview
 Action recognition in video is a complex problem, primarily because it requires understanding both *spatial* features (what is in the scene) and *temporal* features (how things move over time). 
 
 This project explores a fundamental question: **How far can I get with purely spatial features?** Using a curated 15-class subset of the [AVA v2.2 dataset](https://research.google.com/ava/) (a dataset of localized atomic actions from movies), I extracted single frames of localized actors to evaluate the capability (and limitations) of 2D Convolutional Neural Networks in classifying human actions without any temporal context.
 
-## 🔬 Experimental Setup
+## Experimental Setup
 - **Dataset**: A curated subset of the AVA v2.2 dataset, utilizing single extracted face/body crops based on bounding boxes.
 - **Classes**: 15 distinct atomic actions, highly imbalanced, ranging from static postures (`sit`, `stand`) to subtle object interactions (`smoke`, `drink`).
 - **Models Benchmarked**:
   1. **Baseline CNN**: A custom 4-block Convolutional Neural Network trained entirely from scratch. (~3.27M parameters)
   2. **EfficientNet-B2**: Pretrained on ImageNet, fine-tuned with a customized classification head. I froze the stem and early layers to retain generic low-level feature extractors while fine-tuning the deeper semantic layers. (~8.43M parameters)
 
-## 📊 Results & Analysis
+## Results & Analysis
 
 ### Performance Comparison
 | Model | Params | Val Accuracy | mAP |
@@ -41,7 +41,7 @@ Analyzing the per-class Average Precision (AP) for our best model (EfficientNet-
 
 **Conclusion:** Without a temporal dimension (like optical flow or 3D convolutions), the network simply cannot distinguish the act of holding a cigarette from *smoking* it, looking at a cup versus actively *drinking* from it, or holding a book versus *reading* it. 
 
-## ⚙️ Repository Structure
+## Repository Structure
 - `notebooks/`: Contains the training pipelines and logic:
   - Data preparation and manifest routing.
   - Baseline CNN definition and training loop.
@@ -49,5 +49,5 @@ Analyzing the per-class Average Precision (AP) for our best model (EfficientNet-
 - `models/`: Saved model weights (`.pth`) and training history/metrics (`.json`).
 - `results/`: Contains generated visualizations (training curves, confusion matrices, AP charts).
 
-## 🚀 Future Directions
+## Future Directions
 As demonstrated by the stark drop-off in AP for motion-dependent classes, spatial features alone are insufficient for robust action recognition. The logical next step in this research pipeline is to introduce the temporal dimension by implementing architectures such as **SlowFast** networks or 3D ResNets on sequential video clips.
